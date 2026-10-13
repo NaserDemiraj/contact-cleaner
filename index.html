@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en" data-edition="free">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- No network access at all: the file someone checks can never leave their computer. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>Contact Cleaner: find the duplicate contacts Excel misses</title>
+<meta name="description" content="Find and remove duplicate contacts in Excel or CSV files, privately in your browser. Catches the same person typed differently, the same email or phone written two ways, and similar names. Your file is never uploaded.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="#">Contact&nbsp;Cleaner</a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#pricing" data-only="free">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero wrap">
+  <h1>Find the duplicate contacts Excel misses</h1>
+  <p class="lede">Excel's <em>Remove Duplicates</em> only removes rows that are exactly identical. Real lists are messier: the same person with different capitals, the same email or phone written two ways, <q>ACME Corp.</q> and <q>Acme Corporation</q>. Contact Cleaner finds them, and you decide what to merge.</p>
+  <p class="privacy-line"><span class="lock" aria-hidden="true"></span> Your file never leaves your computer. Everything runs in this page; nothing is uploaded.</p>
+
+  <div id="drop" class="drop" tabindex="0" role="button" aria-describedby="drop-help">
+    <input id="file" type="file" accept=".csv,.txt,.tsv,.xlsx,.xlsm,.xls,.ods" hidden>
+    <p class="drop-title">Drop your contact list here, or <span class="link">choose a file</span></p>
+    <p id="drop-help" class="muted">Excel (.xlsx, .xls), CSV, tab-separated text or OpenDocument (.ods)</p>
+  </div>
+  <p class="sample-line"><button id="sample" class="ghost" type="button">Or try it with a sample list</button></p>
+  <p id="status" class="status" role="status" aria-live="polite"></p>
+</section>
+
+<section id="results" class="wrap results" hidden>
+  <div class="results-head">
+    <h2 id="results-title">What we found</h2>
+    <div id="sheet-pick" class="sheet-pick" hidden>
+      <label for="sheet">Sheet</label>
+      <select id="sheet"></select>
+    </div>
+  </div>
+  <div id="tiles" class="tiles"></div>
+  <p id="columns" class="muted small"></p>
+  <ul id="notes" class="notes"></ul>
+
+  <div id="review" class="review">
+    <div class="review-head">
+      <h3>Likely duplicates to review</h3>
+      <div class="bulk">
+        <button id="merge-sure" type="button" class="ghost">Merge every group with the same email or phone</button>
+        <button id="keep-all" type="button" class="ghost">Keep all</button>
+      </div>
+    </div>
+    <p class="muted small">Nothing is merged unless you choose it. <strong>Merge into one</strong> keeps the first row and fills its empty cells from the others. Cells that differ within a group are highlighted.</p>
+    <div id="groups"></div>
+    <div id="pager" class="pager"></div>
+  </div>
+
+  <details id="invalid" class="invalid" hidden>
+    <summary id="invalid-title"></summary>
+    <div class="table-scroll"><table id="invalid-table"></table></div>
+  </details>
+
+  <div id="export" class="export">
+    <h3>Download</h3>
+    <p id="export-count"></p>
+    <div id="export-buttons" class="export-buttons">
+      <button id="dl-xlsx" type="button" class="primary">Cleaned list (.xlsx)</button>
+      <button id="dl-csv" type="button">Cleaned list (.csv)</button>
+      <button id="dl-dupes" type="button">Duplicates for review (.csv)</button>
+      <button id="dl-summary" type="button" class="ghost">Summary (.txt)</button>
+    </div>
+    <div id="upsell" class="upsell" hidden>
+      <p id="upsell-text"></p>
+      <a id="buy" class="primary button" href="#pricing">Get Contact Cleaner Pro</a>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="wrap band">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><strong>Open your list.</strong> Excel or CSV, any size. Columns with names, emails and phone numbers are found automatically.</li>
+    <li><strong>See what's wrong.</strong> Blank rows and exact duplicates are removed. Likely duplicates are grouped, with the reason: same email, same phone, or similar name.</li>
+    <li><strong>Decide and download.</strong> Merge the groups you're sure about, keep the rest, and download a clean Excel or CSV file.</li>
+  </ol>
+
+  <h3>What it catches that Remove Duplicates doesn't</h3>
+  <div class="table-scroll">
+  <table class="compare">
+    <thead><tr><th>In your list</th><th>Excel's Remove Duplicates</th><th>Contact Cleaner</th></tr></thead>
+    <tbody>
+      <tr><td><q>Arta Berisha</q> and <q>&nbsp;ARTA&nbsp;&nbsp;berisha&nbsp;</q></td><td>Kept twice</td><td>Removed: identical once tidied</td></tr>
+      <tr><td><q>+383 44 123 456</q> and <q>044 123 456</q></td><td>Kept twice</td><td>Flagged: same phone</td></tr>
+      <tr><td><q>Arta@Example.com</q> and <q>arta@example.com</q></td><td>Kept twice</td><td>Flagged: same email</td></tr>
+      <tr><td><q>ACME Corp.</q> and <q>Acme Corporation</q></td><td>Kept twice</td><td>Flagged: similar name</td></tr>
+      <tr><td><q>N/A</q>, <q>null</q>, <q>-</q> in empty cells</td><td>Left as they are</td><td>Cleared</td></tr>
+      <tr><td><q>blerim@example</q></td><td>Not checked</td><td>Flagged: email doesn't look valid</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="pricing" class="wrap band" data-only="free">
+  <h2>Pricing</h2>
+  <div class="plans">
+    <div class="plan">
+      <h3>Free</h3>
+      <p class="price">$0</p>
+      <ul>
+        <li>Check a list of any size and see everything found</li>
+        <li>Review and merge duplicates</li>
+        <li>Download cleaned lists up to <span class="free-rows">500</span> rows</li>
+      </ul>
+    </div>
+    <div class="plan pro">
+      <h3>Pro</h3>
+      <p class="price"><span class="pro-price">$9</span> <span class="muted small">once, no subscription</span></p>
+      <ul>
+        <li>Download cleaned lists of any size</li>
+        <li>An offline copy you keep: one file that opens in your browser and works without internet</li>
+        <li>The same private checking: nothing is ever uploaded</li>
+      </ul>
+      <a class="primary button buy-link" href="#pricing">Get Pro</a>
+    </div>
+  </div>
+  <p class="muted small">Check your list for free first: you only need Pro if it found something worth cleaning and your list has more than <span class="free-rows">500</span> rows.</p>
+</section>
+
+<section id="faq" class="wrap band">
+  <h2>Questions</h2>
+  <details><summary>Is my file uploaded anywhere?</summary>
+    <p>No. The page reads your file inside your browser and never sends it anywhere. Its security settings block it from connecting to any server, so it couldn't send your file even by mistake. You can disconnect from the internet after the page has loaded and it keeps working.</p></details>
+  <details><summary>Does it merge my contacts automatically?</summary>
+    <p>Only exact duplicates (rows that are identical once spacing and capitals are tidied) are removed automatically. Likely duplicates are grouped for you to decide, because merging two different people is a worse mistake than keeping one duplicate.</p></details>
+  <details><summary>What counts as a likely duplicate?</summary>
+    <p>Two rows with the same email address, the same phone number (the last eight digits, so <q>+383 44 123 456</q> matches <q>044 123 456</q>), or names that are at least 88% similar after accents, punctuation and company endings like <q>Ltd</q> or <q>Corporation</q> are set aside. When similar names have different emails, the group says so: they may be two different people.</p></details>
+  <details><summary>Which columns does it look at?</summary>
+    <p>Columns whose headings mention email, name, company or organisation, and phone, mobile or WhatsApp. If no heading says email, a column where most values look like email addresses is used. Every other column is kept as it is.</p></details>
+  <details><summary>Accented names look wrong after opening my CSV</summary>
+    <p>Some CSV files are saved in an older encoding. Contact Cleaner detects Western and Central European encodings and tells you which one it used; the downloaded files are saved so Excel shows accented names correctly.</p></details>
+  <details><summary>What if it finds nothing?</summary>
+    <p>Then your list is already clean and you don't need to buy anything. The free check shows everything it finds before you pay.</p></details>
+</section>
+</main>
+
+<footer class="wrap foot">
+  <p class="muted small">Contact Cleaner runs entirely in your browser. Excel files are read with <a href="https://sheetjs.com" rel="noopener">SheetJS</a> (Apache License 2.0).</p>
+</footer>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="engine.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
