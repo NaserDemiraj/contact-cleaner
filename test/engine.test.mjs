@@ -87,8 +87,11 @@ test("the summary says what was found in plain words", () => {
 
 // Parity: with the extra checks off, the browser must find exactly what
 // GENESIS's listclean.py finds.
-const PY = "C:/Users/W11/genesis/.venv/Scripts/python.exe";
-const LISTCLEAN = "C:/Users/W11/genesis/genesis/economy/products";
+// The reference is GENESIS's listclean.py, in a checkout next to this one
+// (or wherever GENESIS_DIR points); without it this test is skipped.
+const GENESIS = process.env.GENESIS_DIR || path.join(HERE, "..", "..", "genesis");
+const PY = path.join(GENESIS, ".venv", "Scripts", "python.exe");
+const LISTCLEAN = path.join(GENESIS, "genesis", "economy", "products");
 test("parity with listclean.py on every fixture", { skip: !existsSync(PY) && "Python reference not available" }, () => {
   const files = readdirSync(FIX).filter((f) => f.endsWith(".csv")).map((f) => path.join(FIX, f));
   const ref = JSON.parse(execFileSync(PY, [path.join(HERE, "py_reference.py"), LISTCLEAN, ...files], { encoding: "utf8", maxBuffer: 64 << 20 }));
