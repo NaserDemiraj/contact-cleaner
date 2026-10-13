@@ -4,6 +4,6 @@ window.CC_CONFIG = {
   // The free version downloads cleaned lists up to this many rows.
   freeRows: 500,
   // Where "Get Pro" leads: the Payhip product page, once it exists.
-  buyUrl: "",
+  buyUrl: "https://payhip.com/b/rse9L",
   price: "$9",
 };
