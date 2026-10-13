@@ -1,0 +1,3 @@
+# Test fixtures and the vendored library must stay byte-for-byte.
+test/fixtures/** -text
+vendor/** -text
