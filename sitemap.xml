@@ -2,6 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://naserdemiraj.github.io/contact-cleaner/</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-21</lastmod>
+  </url>
+  <url>
+    <loc>https://naserdemiraj.github.io/contact-cleaner/guides/remove-duplicate-contacts-excel.html</loc>
+    <lastmod>2026-10-21</lastmod>
+  </url>
+  <url>
+    <loc>https://naserdemiraj.github.io/contact-cleaner/guides/google-contacts-duplicates-not-detected.html</loc>
+    <lastmod>2026-10-21</lastmod>
+  </url>
+  <url>
+    <loc>https://naserdemiraj.github.io/contact-cleaner/guides/merge-duplicate-contacts-csv.html</loc>
+    <lastmod>2026-10-21</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self' data:; form-action 'none'; base-uri 'none'">
+<title>Clean and merge a contacts CSV without losing data</title>
+<meta name="description" content="How to clean a contacts CSV before importing it into a CRM or mailing tool: fix the encoding, tidy emails and phones, and merge duplicate people without losing details.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='6' fill='%230f766e'/%3E%3Cpath d='M10 16.5l4 4 8-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://naserdemiraj.github.io/contact-cleaner/guides/merge-duplicate-contacts-csv.html">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://naserdemiraj.github.io/contact-cleaner/guides/merge-duplicate-contacts-csv.html">
+<meta property="og:title" content="Clean and merge a contacts CSV without losing data">
+<meta property="og:description" content="Fix encoding, tidy emails and phones, and merge duplicate people before you import.">
+<meta property="og:image" content="https://naserdemiraj.github.io/contact-cleaner/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="../">Contact&nbsp;Cleaner</a>
+    <nav><a href="../">Check a list free</a></nav>
+  </div>
+</header>
+<main class="wrap guide">
+  <p class="crumbs small muted"><a href="../">Contact Cleaner</a> / Guides</p>
+  <h1>How to clean and merge a contacts CSV before you import it</h1>
+  <p class="muted small">Written by the maker of Contact Cleaner, a free browser tool. Everything below works in a plain spreadsheet.</p>
+
+  <p>Importing a messy list into a CRM or mailing tool copies the mess into a place that is harder to fix. Ten minutes on the file first is cheaper than merging records afterwards.</p>
+
+  <h2>1. Open it with the right encoding</h2>
+  <p>If <q>Berisha</q> shows as strange symbols, or accented letters are wrong, the file was saved in an older encoding. In Excel, don't double-click the file: use <em>Data &gt; From Text/CSV</em> and try <em>UTF-8</em> first, then a Western or Central European encoding. In Google Sheets, use <em>File &gt; Import</em>. Fix this before anything else, or you will compare names that only look different.</p>
+
+  <h2>2. Remove the junk</h2>
+  <ul>
+    <li><strong>Blank rows</strong>: sort by any filled column and delete the empty block.</li>
+    <li><strong>Placeholders</strong> like <q>N/A</q>, <q>null</q> or <q>-</q> in email or phone cells: <em>Find &amp; Replace</em> them with nothing, matching the entire cell contents, so they don't count as data.</li>
+    <li><strong>Invalid emails</strong>: filter for emails with no <q>@</q> or no dot after it, and fix or clear them.</li>
+  </ul>
+
+  <h2>3. Make the same thing look the same</h2>
+  <p>Lower-case emails (<code>=LOWER(TRIM(B2))</code>), trim names (<code>=TRIM(A2)</code>) and write phones in one shape. Paste the results back as values and delete the originals only after you have compared a few rows.</p>
+
+  <h2>4. Find the people who appear twice</h2>
+  <p>Excel's <em>Remove Duplicates</em> works well on a tidied email column, because an email address normally identifies one person. It will not catch the same person with two different emails, or the same phone under different names. Highlight repeats on the phone column too (<em>Conditional Formatting &gt; Duplicate Values</em>) and read them.</p>
+
+  <h2>5. Merge, don't just delete</h2>
+  <p>When the same person appears in two rows, deleting one row can throw away a phone number or a company that only the deleted row had. Copy the missing details into the row you keep first. Cells that disagree (two different phone numbers) deserve a look; keep both if both are real.</p>
+
+  <h2>6. Keep a copy and a record</h2>
+  <p>Save the original file untouched, and note how many rows you started and ended with, so a surprise in the CRM can be traced back.</p>
+
+  <div class="callout">
+    <p><strong>Contact Cleaner does steps 2 to 5 in one pass:</strong> it clears placeholders, flags invalid emails, removes exact duplicates, and groups likely duplicates with the reason. The <em>Merge into one</em> button keeps the first row and fills its empty cells from the others, highlighting cells that differ. It reads CSV and Excel files in your browser and never uploads them.</p>
+    <a class="primary button" href="../">Check your CSV free</a>
+  </div>
+
+  <h2>More guides</h2>
+  <ul class="more-guides">
+    <li><a href="remove-duplicate-contacts-excel.html">Remove duplicate contacts in Excel</a></li>
+    <li><a href="google-contacts-duplicates-not-detected.html">Google Contacts duplicates not detected</a></li>
+  </ul>
+</main>
+<footer class="wrap foot">
+  <p class="muted small">Contact Cleaner runs entirely in your browser. <a href="../">Back to the tool</a>.</p>
+</footer>
+</body>
+</html>
