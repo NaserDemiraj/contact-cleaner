@@ -34,7 +34,7 @@
 <main>
 <section class="hero wrap">
   <h1>Find the duplicate contacts Excel misses</h1>
-  <p class="lede">Excel's <em>Remove Duplicates</em> only removes rows that are exactly identical. Real lists are messier: the same person with different capitals, the same email or phone written two ways, <q>ACME Corp.</q> and <q>Acme Corporation</q>. Contact Cleaner finds them, and you decide what to merge.</p>
+  <p class="lede">Excel's <em>Remove Duplicates</em> only removes rows whose cells match exactly (it ignores capitals, nothing else). Real lists are messier: the same person with a stray space or a full stop, the same email or phone written two ways, <q>ACME Corp.</q> and <q>Acme Corporation</q>. Contact Cleaner finds them, and you decide what to merge.</p>
   <p class="privacy-line"><span class="lock" aria-hidden="true"></span> Your file never leaves your computer. Everything runs in this page; nothing is uploaded.</p>
 
   <div id="drop" class="drop" tabindex="0" role="button" aria-describedby="drop-help">
@@ -160,6 +160,10 @@
 </main>
 
 <footer class="wrap foot">
+  <p class="small" data-only="free">Guides:
+    <a href="guides/remove-duplicate-contacts-excel.html">remove duplicate contacts in Excel</a> ·
+    <a href="guides/google-contacts-duplicates-not-detected.html">Google Contacts duplicates not detected</a> ·
+    <a href="guides/merge-duplicate-contacts-csv.html">clean a contacts CSV</a></p>
   <p class="muted small">Contact Cleaner runs entirely in your browser. Excel files are read with <a href="https://sheetjs.com" rel="noopener">SheetJS</a> (Apache License 2.0).</p>
 </footer>
 

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self' data:; form-action 'none'; base-uri 'none'">
+<title>Google Contacts says no duplicates? How to find them anyway</title>
+<meta name="description" content="When Google Contacts' Merge &amp; fix doesn't offer contacts that look the same, export your contacts and find the duplicates yourself. Steps for Excel or Google Sheets.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='6' fill='%230f766e'/%3E%3Cpath d='M10 16.5l4 4 8-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://naserdemiraj.github.io/contact-cleaner/guides/google-contacts-duplicates-not-detected.html">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://naserdemiraj.github.io/contact-cleaner/guides/google-contacts-duplicates-not-detected.html">
+<meta property="og:title" content="Google Contacts says no duplicates? How to find them anyway">
+<meta property="og:description" content="Export your contacts and find the duplicates Merge &amp; fix doesn't offer.">
+<meta property="og:image" content="https://naserdemiraj.github.io/contact-cleaner/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="../">Contact&nbsp;Cleaner</a>
+    <nav><a href="../">Check a list free</a></nav>
+  </div>
+</header>
+<main class="wrap guide">
+  <p class="crumbs small muted"><a href="../">Contact Cleaner</a> / Guides</p>
+  <h1>Google Contacts says there are no duplicates, but you can see them. What to do</h1>
+  <p class="muted small">Written by the maker of Contact Cleaner, a free browser tool. The method below needs only a spreadsheet.</p>
+
+  <h2>First, try Google's own tool</h2>
+  <p>On <a href="https://contacts.google.com" rel="noopener">contacts.google.com</a>, open <em>Merge &amp; fix</em> in the left menu. It suggests contacts it considers duplicates and merges them when you accept. It only suggests close matches, so contacts that differ in how the name, email or phone is written can be missed.</p>
+
+  <h2>Then work on an export, where everything is visible</h2>
+  <ol>
+    <li>On contacts.google.com choose <em>Export</em>, pick <em>Google CSV</em> and download the file. This is also your backup: keep it untouched.</li>
+    <li>Open a copy in Excel or Google Sheets. If accented names look wrong, the file was read in the wrong encoding; in Excel use <em>Data &gt; From Text/CSV</em> and choose UTF-8.</li>
+    <li>Add helper columns that make trivial differences disappear. For the email column, <code>=LOWER(TRIM(B2))</code>. For the name, <code>=LOWER(TRIM(A2))</code>. For a phone, keep only the last eight digits so <q>+383 44 123 456</q> and <q>044 123 456</q> match.</li>
+    <li>Sort by the email helper and look at neighbouring rows, or highlight repeated values with <em>Conditional Formatting &gt; Duplicate Values</em>.</li>
+    <li>Decide, row by row, which to keep. Two rows with the same phone and different names may be two people sharing a number.</li>
+  </ol>
+
+  <h2>Putting the cleaned list back</h2>
+  <p>Importing a CSV adds contacts to the ones you already have, so importing a cleaned file on top of the originals can double your list again. A safe order: export a backup, clean the copy, delete the old contacts you replaced, then import the cleaned file. Check the result on a few contacts before deleting anything else.</p>
+
+  <h2>Why Google misses some</h2>
+  <p>Google doesn't publish exactly how Merge &amp; fix decides what to suggest, so I can't tell you why a particular pair is skipped. What I can say is that the pairs people complain about are usually the same person saved with a slightly different name or a phone number in another format, and those are the differences a spreadsheet with helper columns can line up.</p>
+
+  <div class="callout">
+    <p><strong>A shortcut:</strong> drop the exported CSV into Contact Cleaner. It groups contacts that share an email or phone (however they're written) or have similar names, and tells you why each group matched. Nothing is uploaded; the file is read in your browser.</p>
+    <a class="primary button" href="../">Check your contacts free</a>
+  </div>
+
+  <h2>More guides</h2>
+  <ul class="more-guides">
+    <li><a href="remove-duplicate-contacts-excel.html">Remove duplicate contacts in Excel</a></li>
+    <li><a href="merge-duplicate-contacts-csv.html">Clean and merge a contacts CSV</a></li>
+  </ul>
+</main>
+<footer class="wrap foot">
+  <p class="muted small">Contact Cleaner runs entirely in your browser. <a href="../">Back to the tool</a>.</p>
+</footer>
+</body>
+</html>

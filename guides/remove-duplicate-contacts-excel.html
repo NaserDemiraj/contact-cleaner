@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; img-src 'self' data:; form-action 'none'; base-uri 'none'">
+<title>Remove duplicate contacts in Excel, including near-duplicates</title>
+<meta name="description" content="Why Excel's Remove Duplicates misses duplicate contacts, and a step-by-step way to catch the ones it skips: stray spaces, phone numbers written two ways, similar names.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='6' fill='%230f766e'/%3E%3Cpath d='M10 16.5l4 4 8-9' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://naserdemiraj.github.io/contact-cleaner/guides/remove-duplicate-contacts-excel.html">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://naserdemiraj.github.io/contact-cleaner/guides/remove-duplicate-contacts-excel.html">
+<meta property="og:title" content="Remove duplicate contacts in Excel, including near-duplicates">
+<meta property="og:description" content="Why Remove Duplicates misses duplicate contacts and how to catch the ones it skips.">
+<meta property="og:image" content="https://naserdemiraj.github.io/contact-cleaner/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="../">Contact&nbsp;Cleaner</a>
+    <nav><a href="../">Check a list free</a></nav>
+  </div>
+</header>
+<main class="wrap guide">
+  <p class="crumbs small muted"><a href="../">Contact Cleaner</a> / Guides</p>
+  <h1>How to remove duplicate contacts in Excel, including the ones Remove Duplicates misses</h1>
+  <p class="muted small">Written by the maker of Contact Cleaner, a free browser tool. The method below needs nothing but Excel.</p>
+
+  <h2>What Remove Duplicates does, and doesn't</h2>
+  <p>On the <em>Data</em> tab, <em>Remove Duplicates</em> deletes a row when every column you ticked holds the same value as an earlier row. It ignores capital letters, so <q>ARTA</q> and <q>arta</q> count as the same. Everything else has to match exactly. That means these survive it:</p>
+  <ul>
+    <li>a trailing or double space: <q>Arta Berisha </q> and <q>Arta Berisha</q></li>
+    <li>punctuation: <q>Acme Corp.</q> and <q>Acme Corp</q></li>
+    <li>the same phone written two ways: <q>+383 44 123 456</q> and <q>044 123 456</q></li>
+    <li>different spelling: <q>Acme Corp.</q> and <q>Acme Corporation</q></li>
+  </ul>
+  <p>It also deletes straight away, so <strong>work on a copy of the sheet</strong>.</p>
+
+  <h2>Step 1: tidy the values into helper columns</h2>
+  <p>Add columns to the right of your data and fill them down. For a name or company in column A:</p>
+<pre>=LOWER(TRIM(SUBSTITUTE(SUBSTITUTE(A2,CHAR(160)," "),".","")))</pre>
+  <p><code>TRIM</code> removes leading, trailing and doubled spaces; <code>CHAR(160)</code> is the non-breaking space that web pages and CRMs often leave behind and that <code>TRIM</code> alone does not touch. For an email in column B:</p>
+<pre>=LOWER(TRIM(B2))</pre>
+  <p>For a phone number in column C, keep only the last eight digits so a country code or a leading zero stops mattering:</p>
+<pre>=RIGHT(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(C2," ",""),"-",""),"(",""),")",""),"+",""),8)</pre>
+
+  <h2>Step 2: remove the exact duplicates on the helper columns</h2>
+  <p>Copy the helper columns and paste them as values (<em>Paste Special &gt; Values</em>), then run <em>Data &gt; Remove Duplicates</em> ticking only the email helper column. That removes rows with the same email however it was typed. Use the name helper only if you are sure a name alone identifies a person; it usually doesn't.</p>
+
+  <h2>Step 3: look at what is left before deleting more</h2>
+  <p>To see duplicates without deleting anything, select a helper column and use <em>Home &gt; Conditional Formatting &gt; Highlight Cells Rules &gt; Duplicate Values</em>, or count them in a new column:</p>
+<pre>=COUNTIF($D$2:$D$5000,D2)&gt;1</pre>
+  <p>Sort by that column and read the highlighted rows. Two rows with the same phone but different names might be a husband and wife, or a typo, and only you know which.</p>
+
+  <h2>Where this stops working</h2>
+  <p>Helper columns find values that become <em>identical</em> once tidied. They do not find <q>Acme Corp.</q> next to <q>Acme Corporation</q>, or <q>Blerim Krasniqi</q> next to <q>Blerim Krasnighi</q>. On Windows, Microsoft's Fuzzy Lookup add-in does approximate matching if you can install it. For a long list that is a lot of manual work, which is the case Contact Cleaner is for.</p>
+
+  <div class="callout">
+    <p><strong>Short on time?</strong> Contact Cleaner does steps 1 to 3 for you: it removes exact duplicates, groups the likely ones (same email, same phone, similar name) with the reason, and lets you choose what to merge. Your file is read inside your browser and never uploaded.</p>
+    <a class="primary button" href="../">Check your list free</a>
+  </div>
+
+  <h2>More guides</h2>
+  <ul class="more-guides">
+    <li><a href="google-contacts-duplicates-not-detected.html">Google Contacts duplicates not detected</a></li>
+    <li><a href="merge-duplicate-contacts-csv.html">Clean and merge a contacts CSV</a></li>
+  </ul>
+</main>
+<footer class="wrap foot">
+  <p class="muted small">Contact Cleaner runs entirely in your browser. <a href="../">Back to the tool</a>.</p>
+</footer>
+</body>
+</html>

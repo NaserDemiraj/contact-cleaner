@@ -149,6 +149,18 @@ td.rownum { color: var(--muted); }
 #faq details p { margin: 10px 0 0; }
 .foot { padding-block: 24px 40px; border-top: 1px solid var(--line); }
 
+/* guides */
+.guide { max-width: 46em; padding-block: 36px 24px; }
+.guide h1 { font-size: 1.8rem; line-height: 1.25; margin: 0 0 12px; }
+.guide h2 { font-size: 1.25rem; margin: 32px 0 8px; }
+.guide pre, .guide code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .92em; }
+.guide pre { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; }
+.guide :not(pre) > code { background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+.guide .callout { background: var(--accent-soft); border-radius: var(--radius); padding: 14px 18px; margin: 28px 0; }
+.guide .callout p { margin: 0 0 10px; }
+.crumbs { margin: 0 0 14px; }
+.more-guides { display: flex; gap: 6px 18px; flex-wrap: wrap; margin: 0; padding: 0; list-style: none; }
+
 @media (max-width: 600px) {
   .hero { padding-block: 28px 16px; }
   .drop { padding: 28px 14px; }
