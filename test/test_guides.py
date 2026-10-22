@@ -71,6 +71,18 @@ def test_every_local_link_resolves(page):
         assert (page.parent / href).resolve().exists() or (page.parent / href).resolve().is_dir(), href
 
 
+def test_every_buy_link_reaches_the_store_even_without_javascript():
+    """A sale must not depend on app.js running: the links point at the store
+    in the HTML itself, and agree with config.js (which app.js applies)."""
+    store = re.search(r'buyUrl:\s*"([^"]+)"', text(ROOT / "config.js")).group(1)
+    assert store.startswith("https://payhip.com/b/")
+    home = text(ROOT / "index.html")
+    links = re.findall(r'<a[^>]*(?:id="buy"|class="[^"]*buy-link[^"]*")[^>]*>', home)
+    assert len(links) == 2
+    for a in links:
+        assert f'href="{store}"' in a and 'rel="noopener"' in a, a
+
+
 def test_guides_do_not_repeat_the_wrong_claim_that_remove_duplicates_is_case_sensitive():
     for page in GUIDES + [ROOT / "index.html"]:
         html = text(page).lower()
