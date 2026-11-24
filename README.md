@@ -22,12 +22,23 @@ every network connection (`connect-src 'none'`), and a browser test checks it.
 
 `config.js` sets the edition, the free row limit and the "Get Pro" link.
 
+The free edition is also a Firefox add-on (`extension/`): the same page inside the
+browser, with no permissions. Its store text is in `extension/LISTING.md`.
+
 ## Build and test
 
 ```sh
-node build.mjs                      # dist/site/ and dist/contact-cleaner-pro.html
+node build.mjs                      # dist/site/, dist/firefox/ and dist/contact-cleaner-pro.html
 node --test test/engine.test.mjs    # engine, incl. parity with GENESIS listclean.py
 python -m pytest test/test_page.py  # both editions in Chrome/Edge (Playwright)
+python -m pytest test/test_extension.py  # the add-on in real Firefox (Selenium 4)
+```
+
+Package the add-on (Mozilla's own tool, lint first):
+
+```sh
+npx web-ext@10.8.0 lint -s dist/firefox
+npx web-ext@10.8.0 build -s dist/firefox -a dist -n contact-cleaner-firefox.zip --overwrite-dest
 ```
 
 `dist/` is ignored: `dist/contact-cleaner-pro.html` is the paid product and is

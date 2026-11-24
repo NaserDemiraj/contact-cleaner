@@ -1,0 +1,8 @@
+{
+  "guid": "contact-cleaner@naserdemiraj.github.io",
+  "categories": ["other"],
+  "license": "all-rights-reserved",
+  "requires_payment": true,
+  "support_url": "https://github.com/NaserDemiraj/contact-cleaner/issues",
+  "homepage": "https://naserdemiraj.github.io/contact-cleaner/"
+}
