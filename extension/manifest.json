@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Contact Cleaner: Find Duplicate Contacts",
+  "version": "1.0.0",
+  "description": "Find and merge duplicate contacts in spreadsheet and CSV files. Everything runs on your computer; your file is never uploaded.",
+  "homepage_url": "https://naserdemiraj.github.io/contact-cleaner/",
+  "icons": { "48": "icon.svg", "96": "icon.svg", "128": "icon.svg" },
+  "action": { "default_title": "Open Contact Cleaner", "default_icon": "icon.svg" },
+  "background": { "scripts": ["background.js"] },
+  "content_security_policy": {
+    "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; form-action 'none'; base-uri 'none'"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "contact-cleaner@naserdemiraj.github.io",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  }
+}
