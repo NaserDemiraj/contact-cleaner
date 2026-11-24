@@ -20,6 +20,7 @@ async function run(command, { exists = false, valid = true, failOn = null } = {}
   let created = exists;
   const server = http.createServer((req, res) => {
     const chunks = [];
+    if (req.method === "HEAD") { res.writeHead(200, { Date: new Date(Date.now() - 600_000).toUTCString() }); return res.end(); }
     req.on("data", (c) => chunks.push(c));
     req.on("end", () => {
       const raw = Buffer.concat(chunks).toString("latin1");
@@ -70,6 +71,7 @@ test("submit sends everything once, signed, and never prints the secret", { skip
   assert.equal(sig, createHmac("sha256", SECRET).update(h + "." + p).digest("base64url"));
   const claims = JSON.parse(Buffer.from(p, "base64url"));
   assert.ok(claims.iss === "user:1:2" && claims.exp - claims.iat <= 300 && claims.jti);
+  assert.ok(Math.abs(Date.now() / 1000 - 600 - claims.iat) < 30, "the server's clock is used, not this one");
 });
 
 test("a package the checker refuses is not submitted", { skip }, async () => {

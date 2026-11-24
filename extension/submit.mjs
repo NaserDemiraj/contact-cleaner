@@ -5,6 +5,7 @@
 //   node extension/submit.mjs validate  upload the package and wait for Mozilla's checker;
 //                                       an upload alone creates no listing
 //   node extension/submit.mjs submit    validate, then create the listing and send it for review
+//   node extension/submit.mjs screenshots  add the ones the listing does not have yet
 //   node extension/submit.mjs status    where the listing stands
 //
 // The key lives outside this public repository, in ~/.amo.env:
@@ -66,16 +67,26 @@ function credentials() {
   if (!env.AMO_KEY || !env.AMO_SECRET) throw new Error(`fill in AMO_KEY and AMO_SECRET in ${KEYFILE}`);
   return env;
 }
-function token() {
+// Mozilla refuses a token from a clock that runs even a little fast, so its own clock is used.
+let offset = null;
+async function serverNow() {
+  if (offset === null) {
+    const res = await fetch(API + "site/", { method: "HEAD" });
+    const date = Date.parse(res.headers.get("date") || "");
+    offset = Number.isFinite(date) ? date - Date.now() : 0;
+  }
+  return Math.floor((Date.now() + offset) / 1000) - 1;
+}
+async function token() {
   const { AMO_KEY, AMO_SECRET } = credentials();
-  const now = Math.floor(Date.now() / 1000);
+  const now = await serverNow();
   const part = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
   const head = part({ alg: "HS256", typ: "JWT" }) + "." +
     part({ iss: AMO_KEY, jti: randomUUID(), iat: now, exp: now + 60 });
   return head + "." + createHmac("sha256", AMO_SECRET).update(head).digest("base64url");
 }
 async function call(method, url, payload, { allow = [] } = {}) {
-  const headers = { Authorization: "JWT " + token() };
+  const headers = { Authorization: "JWT " + await token() };
   const form = payload instanceof FormData;
   if (payload && !form) headers["Content-Type"] = "application/json";
   const res = await fetch(API + url, {
@@ -107,6 +118,20 @@ async function validate() {
   return uuid;
 }
 
+// Mozilla limits how fast changes may come; wait between them, and only add what is missing.
+async function screenshots(step) {
+  const { data } = await call("GET", addonUrl);
+  const names = readdirSync(IMAGES).filter((n) => /^\d.*\.png$/.test(n)).sort();
+  for (const name of names.slice((data.previews || []).length)) {
+    await new Promise((r) => setTimeout(r, POLL_MS * 22));
+    await step("screenshot " + name, () => {
+      const f = new FormData();
+      f.append("image", file(path.join(IMAGES, name), "image/png"));
+      return call("POST", addonUrl + "previews/", f);
+    });
+  }
+}
+
 async function submit() {
   const before = await call("GET", addonUrl, null, { allow: [401, 403, 404] });
   if (before.status !== 404) throw new Error("this add-on id already exists on Mozilla (or is not yours); nothing was sent");
@@ -124,13 +149,7 @@ async function submit() {
     f.append("icon", file(path.join(IMAGES, "icon-128.png"), "image/png"));
     return call("PATCH", addonUrl, f);
   });
-  for (const name of readdirSync(IMAGES).filter((n) => /^\d.*\.png$/.test(n)).sort()) {
-    await step("screenshot " + name, () => {
-      const f = new FormData();
-      f.append("image", file(path.join(IMAGES, name), "image/png"));
-      return call("POST", addonUrl + "previews/", f);
-    });
-  }
+  await screenshots(step);
   await step("check that the payment notice is on", async () => {
     const { data: now } = await call("GET", addonUrl);
     if (now.requires_payment !== true) throw new Error("tick 'requires payment' on the add-on's edit page");
@@ -146,6 +165,7 @@ const commands = {
   },
   validate,
   submit,
+  screenshots: () => screenshots(async (name, fn) => { await fn(); console.log(`${name}: done`); }),
   status: async () => {
     const { data } = await call("GET", addonUrl);
     console.log(`${data.name?.["en-US"] || data.name}: ${data.status}; ${data.url}`);
@@ -153,7 +173,7 @@ const commands = {
 };
 const command = commands[process.argv[2]];
 if (!command) {
-  console.error("use: node extension/submit.mjs check | preview | validate | submit | status");
+  console.error("use: node extension/submit.mjs check | preview | validate | submit | screenshots | status");
   process.exitCode = 2;
 } else {
   try { await command(); } catch (e) { console.error(e.message); process.exitCode = 1; }
